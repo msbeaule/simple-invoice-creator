@@ -1,0 +1,108 @@
+@page {
+    margin: 1.5cm;
+    @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-size: 10pt;
+        font-family: "Source Sans Pro", sans-serif;
+        margin-bottom: 10pt;
+    }
+}
+
+/* reset all th */
+th {
+    font-weight: normal;
+}
+
+table {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 14pt;
+    line-height: 16pt;
+    margin: 0;
+    padding: 0;
+}
+
+.above {
+    margin-top: -21pt;
+    padding-bottom: 5pt;
+}
+
+span.label {
+    width: 100pt;
+    display: inline-block;
+}
+
+span.value {
+    display: inline-block;
+    width: 80pt;
+}
+
+#heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 12pt;
+}
+
+#heading .from {
+    order: 5
+}
+
+#heading .from span {
+    display: block;
+}
+
+#heading .from span:first-of-type {
+    font-weight: bold;
+}
+
+#heading .customer span:first-of-type {
+    font-weight: bold;
+}
+
+#heading .customer {
+    order: 1;
+}
+
+#heading .customer span {
+    display: block;
+}
+
+#heading .invoice-details {
+    order: 10;
+}
+
+#content {
+    font-size: 10pt;
+    line-height: 12pt;
+    width: 100%;
+}
+
+.items table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.items th {
+    font-weight: bold;
+}
+
+.items th, .items td {
+    width: 20%;
+    padding: 5px 10px;
+}
+
+.items td {
+  border-bottom: 0.5px solid black;
+  border-top: 0.5px solid black;
+}
+
+.items .item        { width: 20%; }
+.items .description { width: 40%; }
+.items .rate        { width: 15%; }
+.items .hours       { width: 10%; }
+.items .line-total  { width: 15%; }
