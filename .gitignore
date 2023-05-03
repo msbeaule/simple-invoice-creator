@@ -1,3 +1,5 @@
 *.json
 *.pdf
 example.*
+*.csv
+*.xlsx
