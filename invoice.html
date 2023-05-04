@@ -103,8 +103,14 @@
             </tr>
             </thead>
             <tbody>
-            {% for n in range(50) %}
-                {% include "snippet_table.html" %}
+            {% for item in items %}
+            <tr>
+                <td class="text-left item">{{item.task}}</td>
+                <td class="text-left description">{{item.description}}</td>
+                <td class="text-right text-nowrap rate">item.rate</td>
+                <td class="text-right text-nowrap hours">{{item.duration}}</td>
+                <td class="text-right text-nowrap line-total">item.total</td>
+            </tr>            
             {% endfor %}
             
             </tbody>
