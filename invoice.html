@@ -76,7 +76,7 @@
         </div>
         <div>
             <span class="label">Balance Due:</span>
-            <span class="value">1200.00 CAD</span>
+            <span class="value">$ {{balance}} CAD</span>
         </div>
         </div>
     </div>
@@ -107,9 +107,9 @@
             <tr>
                 <td class="text-left item">{{item.task}}</td>
                 <td class="text-left description">{{item.description}}</td>
-                <td class="text-right text-nowrap rate">item.rate</td>
+                <td class="text-right text-nowrap rate">{{item.rate}}</td>
                 <td class="text-right text-nowrap hours">{{item.duration}}</td>
-                <td class="text-right text-nowrap line-total">item.total</td>
+                <td class="text-right text-nowrap line-total">$ {{ item.price }}</td>
             </tr>            
             {% endfor %}
             
@@ -132,7 +132,7 @@
 
     <div id="balance">
         <span>Balance Due</span>
-        <span>number here</span>
+        <span>$ {{balance}} CAD</span>
     </div>
     
         

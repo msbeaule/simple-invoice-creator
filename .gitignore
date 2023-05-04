@@ -3,3 +3,5 @@
 example.*
 *.csv
 *.xlsx
+
+__pycache__
