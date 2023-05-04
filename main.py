@@ -94,4 +94,4 @@ finished_list = list(filter(lambda a: a["deleted"] != True, results))
 print(f'length after: {len(finished_list)}')
 
 # make a demo pdf only using the data from a certain project/customer
-make_pdf( list(filter(lambda a: a["project"] == customer["aliases"][0], results)) )
+make_pdf( list(filter(lambda a: a["project"] == customer["aliases"][0], finished_list)) )
