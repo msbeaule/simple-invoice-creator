@@ -49,14 +49,24 @@ class DurationSplit:
     def set_prices_from_durations(self, items):
         for item in items:
             time = item["duration"].split(":")
-            # seconds don't matter for this
-            # minutes get +1 to account for seconds
+            # nvm seconds DO matter for this
 
+            seconds = int(time[2])
+            seconds = seconds / self.SIXTY
             minutes = int(time[1])
-            minutes = (minutes) / self.SIXTY
+            minutes = minutes + seconds
+            # this rounding here is important
+            minutes = round(Decimal(minutes / self.SIXTY), 4)
             hours = int(time[0])
+            final_hours = hours + minutes
 
-            item["price"] = round(Decimal((hours + minutes) * item["rate"]), 2)
+            price = final_hours * item["rate"]
+
+            # then round it to two
+            price = round(Decimal(price), 2)
+
+            # then format with two 0's and save it
+            item["price"] = f'{price:.2f}'
     
     def set_all_rates(self, items):
         for item in items:
@@ -67,7 +77,7 @@ class DurationSplit:
     def get_total_balance(self, items):
         balance = 0
         for item in items:
-            balance = balance + item["price"]
+            balance = balance + Decimal(item["price"])
         
         return balance
 
@@ -143,18 +153,22 @@ with open("2023-04.csv", "r") as f:
 duration.set_all_rates(results)
 duration.set_prices_from_durations(results)
 
-for x, item in enumerate(results):
-    if (item["project"] == customer["aliases"][0] and item["deleted"] == False):
-        find_duplicates_with_same_description_edit(results, item, x)
+# TODO: FIX
+# for x, item in enumerate(results):
+#     if (item["project"] == customer["aliases"][0] and item["deleted"] == False):
+#         find_duplicates_with_same_description_edit(results, item, x)
 
 print(f'length before: {len(results)}')
 
+# temp create new list with certain project
+finished_list = list(filter(lambda a: a["project"] == customer["aliases"][0], results))
+
 # create a new list without all the items that were deleted bc they were duplicates
-finished_list = list(filter(lambda a: a["deleted"] != True, results))
+finished_list = list(filter(lambda a: a["deleted"] != True, finished_list))
 
 balance = duration.get_total_balance(finished_list)
 
 print(f'length after: {len(finished_list)}')
 
 # make a demo pdf only using the data from a certain project/customer
-make_pdf( list(filter(lambda a: a["project"] == customer["aliases"][0], finished_list)), balance )
+make_pdf(finished_list, balance )
