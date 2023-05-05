@@ -1,4 +1,7 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
+
+six_months = date.today() + relativedelta(months=+6)
 import json, csv, math
 import decimal
 from decimal import Decimal
@@ -118,7 +121,10 @@ def make_pdf(items, balance):
     env.filters["round_float"] = j2_round_float_to_two
     template = env.get_template("invoice.html")
 
-    html_out = template.render(customer=customer, invoiceNumber="2023-0001", date="today", my_business=my_business, items=items, balance=balance)
+    today = date.today()
+    due_date = today + relativedelta(months=+1)
+
+    html_out = template.render(customer=customer, invoiceNumber="2023-0001", date=today, due_date=due_date, my_business=my_business, items=items, balance=balance)
 
     HTML(string=html_out).write_pdf("invoice.pdf", stylesheets=["invoice.css"])
 
