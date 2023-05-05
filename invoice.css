@@ -27,8 +27,12 @@ body {
 }
 
 .above {
-    margin-top: -21pt;
     padding-bottom: 5pt;
+}
+
+hr {
+    margin-top: 15pt;
+    margin-bottom: 15pt;
 }
 
 span.label {
@@ -41,7 +45,7 @@ span.value {
     width: 80pt;
 }
 
-#heading {
+#heading, #my_business_heading {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -52,11 +56,11 @@ span.value {
     order: 5
 }
 
-#heading .from span {
+#my_business_heading .from span {
     display: block;
 }
 
-#heading .from span:first-of-type {
+#my_business_heading .from span:first-of-type {
     font-weight: bold;
 }
 

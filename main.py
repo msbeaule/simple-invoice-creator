@@ -17,6 +17,10 @@ with open("customers.json") as customer_file:
     customers = customer_file.read()
     customer = json.loads(customers)[1]
 
+with open("my_business.json") as business_file:
+    business_info = business_file.read()
+    my_business = json.loads(business_info)
+
 class DurationSplit:
     SIXTY = 60
 
@@ -114,7 +118,7 @@ def make_pdf(items, balance):
     env.filters["round_float"] = j2_round_float_to_two
     template = env.get_template("invoice.html")
 
-    html_out = template.render(customer=customer, invoiceNumber="2023-0001", date="today", items=items, balance=balance)
+    html_out = template.render(customer=customer, invoiceNumber="2023-0001", date="today", my_business=my_business, items=items, balance=balance)
 
     HTML(string=html_out).write_pdf("invoice.pdf", stylesheets=["invoice.css"])
 

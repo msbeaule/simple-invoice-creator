@@ -5,58 +5,42 @@
 </head>
 <body>
 
-<div id="heading">
+<div id="my_business_heading">
     <div class="from">
-        <span>business.name</span>
-        <span>business.contact</span>
-        <span>business.website</span>
-        <span>business.email</span>
-        <span>business.address_one</span>
-        <span>business.address_two</span>
-        <span>business.country</span>
+        <div class="above">
+            From
+        </div>
+        {%- if my_business.business_name != "" %}
+        <span>is displayed</span>
+        <span>{{ my_business.business_name }}</span>
+        {%- endif %}
+        <span>{{ my_business.contact_name }}</span>
+        <span>{{ my_business.website }}</span>
+        <span>{{ my_business.email }}</span>
+        <span>{{ my_business.address_one }}</span>
+        <span>{{ my_business.address_two }}</span>
+        <span>{{ my_business.city }}, {{ my_business.province }} {{ my_business.postal_code }}</span>
+        <span>{{ my_business.country }}</span>
     </div>
+</div>
 
+<hr>
+
+<div id="heading">
     <div class="customer">
         <div class="above">
             Invoice To
         </div>
-        {%- if 'business_name' in customer %}
+        {%- if customer.business_name != "" %}
         <span>{{ customer.business_name }}</span>
         {%- endif %}
         <span>{{ customer.contact_name }}</span>
         <span>{{ customer.email }}</span>
         <span>{{ customer.address_one }}</span>
-        {%- if 'address_two' in customer %}
         <span>{{ customer.address_two }}</span>
-        {%- endif %}
         <span>{{ customer.city }}, {{ customer.province }} {{ customer.postal_code}}</span>
         <span>{{ customer.country }}</span>
     </div>
-
-    <!-- <div class="invoice-details">
-        <div class="above">
-            Details
-        </div>
-        <table cellpadding="0" cellspacing="0">
-                <tr>
-                    <th class="label">Invoice Number:</th>
-                    <td class="value">{{invoiceNumber}}</td>
-                </tr>
-                <tr>
-                    <th class="label">Invoice Date:</th>
-                    <td class="value">{{date}}</td>
-                </tr>
-                <tr>
-                    <th class="label">Due Date:</td>
-                    <td class="value">due date</td>
-                </tr>
-                <tr>
-                    <th class="label">Balance Due:</td>
-                    <td class="value">1200.00 CAD</td>
-                </tr>
-                
-        </table>
-    </div> -->
 
     <div class="invoice-details">
         <div class="above">
