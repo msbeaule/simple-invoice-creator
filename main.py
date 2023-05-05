@@ -44,7 +44,7 @@ class DurationSplit:
 
         # print(f'{hours:02}:{minutes:02}:{seconds:02}')
 
-        return f'{hours:02}:{minutes:02}:{seconds:02}'
+        return f'{hours:01}:{minutes:02}:{seconds:02}'
     
     def set_prices_from_durations(self, items):
         for item in items:
@@ -120,7 +120,7 @@ def make_pdf(items, balance):
 
 def find_duplicates_with_same_description_edit(results, item, index):
     for search_index in range(index + 1, len(results)):
-        if (item["project"] == customer["aliases"][0] and item["deleted"] == False):
+        if (item["deleted"] == False):
             if item["task"] == results[search_index]["task"] and \
                 item["description"] == results[search_index]["description"]:
                 # print("HIT")
@@ -149,22 +149,23 @@ with open("2023-04.csv", "r") as f:
 
     #print(json.dumps(results))
 
+# temp create new list with certain project
+results = list(filter(lambda a: a["project"] == customer["aliases"][0], results))
+
 # have these work for each company, right now it's just the full list
 duration.set_all_rates(results)
-duration.set_prices_from_durations(results)
 
-# TODO: FIX
-# for x, item in enumerate(results):
-#     if (item["project"] == customer["aliases"][0] and item["deleted"] == False):
-#         find_duplicates_with_same_description_edit(results, item, x)
+for x, item in enumerate(results):
+    if (item["deleted"] == False):
+        find_duplicates_with_same_description_edit(results, item, x)
+
+# need this after the duplicates are merged together
+duration.set_prices_from_durations(results)
 
 print(f'length before: {len(results)}')
 
-# temp create new list with certain project
-finished_list = list(filter(lambda a: a["project"] == customer["aliases"][0], results))
-
 # create a new list without all the items that were deleted bc they were duplicates
-finished_list = list(filter(lambda a: a["deleted"] != True, finished_list))
+finished_list = list(filter(lambda a: a["deleted"] != True, results))
 
 balance = duration.get_total_balance(finished_list)
 
