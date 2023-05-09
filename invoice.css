@@ -36,13 +36,18 @@ hr {
 }
 
 span.label {
-    width: 100pt;
     display: inline-block;
 }
 
 span.value {
     display: inline-block;
     width: 80pt;
+}
+
+.invoice-details span.label {
+    width: 100pt;
+    text-align: left;
+    padding-right: 10pt;
 }
 
 #heading, #my_business_heading {
@@ -114,3 +119,38 @@ span.value {
 .items .rate        { width: 15%; }
 .items .hours       { width: 10%; }
 .items .line-total  { width: 15%; }
+
+
+#end {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 12pt;
+    margin-top: 12pt;
+    line-height: 14pt;
+}
+
+#end #balance {
+    margin-top: 10pt;
+    font-size: 13pt;
+    font-weight: 600;
+}
+
+#end span.label {
+    text-align: right;
+    width: 73pt;
+}
+
+#end span.value {
+    text-align: right;
+    width: 90pt;
+}
+
+#public_notes {
+    width: 230pt;
+}
+
+#totals {
+    padding: 10pt;
+    background: rgb(235, 235, 235);
+}

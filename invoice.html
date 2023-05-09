@@ -102,22 +102,29 @@
     </div>
 
     <div id="end">
-        <div class="public-notes">
-            <p>
+        <div id="public_notes">
+            <span>
                 {{ customer.public_notes }}
-            </p>
+            </span>
         </div>
-        <div class="totals">
-            <span>Subtotal</span> <span>number here</span>
-            <span>Paid to Date</span> <span>number here</span>
+        <div id="totals">
+            <div class="inside">
+                <div class="subtotals">
+                    <span class="label">Subtotal:</span>
+                    <span class="value">number here</span>
+                </div>
+                <div class="subtotals">
+                    <span class="label">Paid to Date:</span>
+                    <span class="value">number here</span>
+                </div>
+                <div id="balance">
+                    <span class="label">Balance Due:</span>
+                    <span class="value">$ {{ balance }} CAD</span>
+                </div>
+            </div>
         </div>
+        
     </div>
-
-    <div id="balance">
-        <span>Balance Due</span>
-        <span>$ {{balance}} CAD</span>
-    </div>
-    
         
 </div>
 
