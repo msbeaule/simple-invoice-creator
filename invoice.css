@@ -80,6 +80,10 @@ span.value {
     order: 10;
 }
 
+.invoice-number {
+    font-weight: bold;
+}
+
 #content {
     font-size: 10pt;
     line-height: 12pt;

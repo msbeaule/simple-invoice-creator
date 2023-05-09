@@ -16,13 +16,37 @@ ctx = decimal.getcontext()
 ctx.rounding = decimal.ROUND_HALF_UP
 
 
-with open("customers.json") as customer_file:
-    customers = customer_file.read()
+with open("customers.json") as file:
+    customers = file.read()
     customer = json.loads(customers)[1]
 
-with open("my_business.json") as business_file:
-    business_info = business_file.read()
+with open("my_business.json") as file:
+    business_info = file.read()
     my_business = json.loads(business_info)
+
+def sort_by_invoice_number(item):
+    return item["invoice_number"]
+
+def get_next_invoice_number():
+    with open("invoices.json") as file:
+        invoice_info = file.read()
+        past_invoices = json.loads(invoice_info)
+
+    # sort based on invoice numbers so I can get the most recent
+    past_invoices = sorted(past_invoices, key=sort_by_invoice_number)
+
+    # invoice number looks like 2023-0001, so split it by the - and get the part after the -
+    last_invoice_number = int(past_invoices[-1]["invoice_number"].split("-")[1])
+
+    # add one to the invoice number
+    current_invoice_number = last_invoice_number + 1
+    current_year = date.today().year
+
+    # add the current year and the new invoice number together
+    current_invoice_number = f'{current_year}-{current_invoice_number:04}'
+
+    return current_invoice_number
+
 
 class DurationSplit:
     SIXTY = 60
@@ -124,7 +148,9 @@ def make_pdf(items, balance):
     today = date.today()
     due_date = today + relativedelta(months=+1)
 
-    html_out = template.render(customer=customer, invoiceNumber="2023-0001", date=today, due_date=due_date, my_business=my_business, items=items, balance=balance)
+    html_out = template.render(customer=customer, invoice_number=get_next_invoice_number(), date=today, due_date=due_date,
+        my_business=my_business, items=items, balance=balance
+    )
 
     HTML(string=html_out).write_pdf("invoice.pdf", stylesheets=["invoice.css"])
 
