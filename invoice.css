@@ -95,6 +95,19 @@ span.value {
     width: 100%;
 }
 
+#content .rate {
+    text-align: center;
+}
+
+#content .line-total {
+    text-align: right;
+}
+
+#content tbody .line-total {
+    /* text-align: right; */
+    padding-right: 15pt !important;
+}
+
 .items table {
     border-spacing: 0;
     border-collapse: collapse;
