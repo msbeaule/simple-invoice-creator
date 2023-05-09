@@ -197,14 +197,14 @@ for x, item in enumerate(results):
 # need this after the duplicates are merged together
 duration.set_prices_from_durations(results)
 
-print(f'length before: {len(results)}')
+# print(f'length before: {len(results)}')
 
 # create a new list without all the items that were deleted bc they were duplicates
 finished_list = list(filter(lambda a: a["deleted"] != True, results))
 
 balance = duration.get_total_balance(finished_list)
 
-print(f'length after: {len(finished_list)}')
+# print(f'length after: {len(finished_list)}')
 
 # make a demo pdf only using the data from a certain project/customer
 make_pdf(finished_list, balance )
