@@ -109,7 +109,19 @@ class DurationSplit:
         for item in items:
             balance = balance + Decimal(item["price"])
         
-        return balance
+        subtotal = balance
+
+        # TODO: get actual paid to date
+        paid_to_date = Decimal(0)
+
+        balance = subtotal - paid_to_date
+
+        # keeps the decimal places in check
+        balance = round(balance, 2)
+
+        paid_to_date_str = f'{paid_to_date:.2f}'
+                
+        return balance, subtotal, paid_to_date_str
 
     
     def __add_all_together(self, items):
@@ -138,7 +150,7 @@ class DurationSplit:
         return duration, to_add
 
 
-def make_pdf(items, balance):
+def make_pdf(items, balance, subtotal, paid_to_date):
     env = Environment(loader=FileSystemLoader('.'))
     # adding custom filter
     env.filters["round_float"] = j2_round_float_to_two
@@ -148,7 +160,7 @@ def make_pdf(items, balance):
     due_date = today + relativedelta(months=+1)
 
     html_out = template.render(customer=customer, invoice_number=get_next_invoice_number(), date=today, due_date=due_date,
-        my_business=my_business, items=items, balance=balance
+        my_business=my_business, items=items, balance=balance, subtotal=subtotal, paid_to_date=paid_to_date
     )
 
     HTML(string=html_out).write_pdf("invoice.pdf", stylesheets=["invoice.css"])
@@ -202,9 +214,9 @@ duration.set_prices_from_durations(results)
 # create a new list without all the items that were deleted bc they were duplicates
 finished_list = list(filter(lambda a: a["deleted"] != True, results))
 
-balance = duration.get_total_balance(finished_list)
+balance, subtotal, paid_to_date = duration.get_total_balance(finished_list)
 
 # print(f'length after: {len(finished_list)}')
 
 # make a demo pdf only using the data from a certain project/customer
-make_pdf(finished_list, balance )
+make_pdf(finished_list, balance, subtotal, paid_to_date)
