@@ -146,6 +146,32 @@ class InvoiceHelper:
                     results[search_index]["deleted"] = True
                     new_duration = self.add_two_together(item["duration"], results[search_index]["duration"])
                     item["duration"] = new_duration
+    
+    def get_total_hours(self, items):
+        hours = 0
+        minutes = 0
+        seconds = 0
+
+        for item in items:
+            time = item["duration"].split(":")
+
+            seconds += int(time[2])
+
+            minutes += int(time[1])
+
+            hours += int(time[0])
+
+        minutes_to_add = 0
+        hours_to_add = 0
+
+        seconds, minutes_to_add = self._get_time_and_remaining(seconds)
+
+        minutes += minutes_to_add
+        minutes, hours_to_add = self._get_time_and_remaining(minutes)
+
+        hours += hours_to_add
+
+        return f'{hours:01} hours, {minutes:02} minutes, {seconds:02} seconds'
 
 
 def make_pdf():
@@ -153,6 +179,8 @@ def make_pdf():
     customer = helper.get_customer()
     invoice_number = helper.get_next_invoice_number()
     my_business = helper.get_my_business()
+
+    PDF_NAME = f'invoice_{invoice_number}.pdf'
 
     today = date.today()
     due_date = today + relativedelta(months=+1)
@@ -205,7 +233,11 @@ def make_pdf():
         my_business=my_business, items=finished_list, balance=balance, subtotal=subtotal, paid_to_date=paid_to_date
     )
 
-    HTML(string=html_out).write_pdf(f'invoice_{invoice_number}.pdf', stylesheets=["invoice.css"])
+    HTML(string=html_out).write_pdf(PDF_NAME, stylesheets=["invoice.css"])
+
+    print(f'invoice created: "{PDF_NAME}"')
+
+    print(f'Total billable hours in this invoice: {helper.get_total_hours(finished_list)}')
 
 
 # make a demo pdf only using the data from a certain project/customer
