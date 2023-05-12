@@ -1,7 +1,7 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-import json, csv, math
+import json, csv, math, argparse
 import decimal
 from decimal import Decimal
 
@@ -14,7 +14,21 @@ from filters import j2_round_float_to_two
 ctx = decimal.getcontext()
 ctx.rounding = decimal.ROUND_HALF_UP
 
-INVOICE_FILE_CSV = "2023-04.csv"
+parser = argparse.ArgumentParser(
+                    prog='SimpleInvoiceCreator',
+                    description='Takes a .csv file and creates a PDF invoice with it',
+                    epilog='Look at README for help with .csv file layout and more')
+
+parser.add_argument('-i', '--input', required=True, help="Input a .csv file with data to make the invoice from")
+
+TEST_INVOICE_FILE_NAME = "test_invoice.pdf"
+
+# TODO: implement this, 
+parser.add_argument('-t', '--test', help=f'Creates an invoice with data but the file name is {TEST_INVOICE_FILE_NAME}')
+
+args = parser.parse_args()
+
+print(args.input)
 
 class InvoiceHelper:
     SIXTY = 60
@@ -185,7 +199,7 @@ def make_pdf():
     today = date.today()
     due_date = today + relativedelta(months=+1)
 
-    with open(INVOICE_FILE_CSV, "r") as f:
+    with open(args.input, "r") as f:
         results = [
             {
                 "project": row["Project"],
