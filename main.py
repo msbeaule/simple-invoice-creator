@@ -23,12 +23,9 @@ parser.add_argument('-i', '--input', required=True, help="Input a .csv file with
 
 TEST_INVOICE_FILE_NAME = "test_invoice.pdf"
 
-# TODO: implement this, 
-parser.add_argument('-t', '--test', help=f'Creates an invoice with data but the file name is {TEST_INVOICE_FILE_NAME}')
+parser.add_argument('-t', '--test', nargs="?", const=True, default=False, help=f'Creates an invoice with data but the file name is {TEST_INVOICE_FILE_NAME}')
 
 args = parser.parse_args()
-
-print(args.input)
 
 class InvoiceHelper:
     SIXTY = 60
@@ -194,7 +191,10 @@ def make_pdf():
     invoice_number = helper.get_next_invoice_number()
     my_business = helper.get_my_business()
 
-    PDF_NAME = f'invoice_{invoice_number}.pdf'
+    if args.test:
+        PDF_NAME = TEST_INVOICE_FILE_NAME
+    else:
+        PDF_NAME = f'invoice_{invoice_number}.pdf'
 
     today = date.today()
     due_date = today + relativedelta(months=+1)
