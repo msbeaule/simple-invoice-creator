@@ -10,6 +10,9 @@ from jinja2 import Environment, FileSystemLoader
 
 from filters import j2_round_float_to_two
 
+# when task is empty
+DEFAULT_TASK_NAME = "misc"
+
 # setting up rounding for decimals
 ctx = decimal.getcontext()
 ctx.rounding = decimal.ROUND_HALF_UP
@@ -150,13 +153,33 @@ class InvoiceHelper:
     def find_duplicates_with_same_description_edit(self, results, item, index):
         for search_index in range(index + 1, len(results)):
             if (item["deleted"] == False):
-                if item["task"] == results[search_index]["task"] and \
+                if self.does_task_match(item, results[search_index]) and \
                     item["description"] == results[search_index]["description"]:
                     # print("HIT")
                     # print(results[search_index]["description"])
                     results[search_index]["deleted"] = True
                     new_duration = self.add_two_together(item["duration"], results[search_index]["duration"])
                     item["duration"] = new_duration
+    
+    def does_task_match(self, item, result):
+        task = item["task"]
+        result_task = result["task"]
+        
+        return task == result_task
+    
+    def get_task_and_description(self, value: str):
+        split_string = value.split(":", 1)
+        # print(value)
+        # print(len(split_string))
+        if len(split_string) == 1:
+            task = DEFAULT_TASK_NAME
+            description = split_string[0]
+        else:
+            task = split_string[0]
+            description = split_string[1]
+        
+        return [task, description]
+
     
     def get_total_hours(self, items):
         hours = 0
@@ -183,6 +206,39 @@ class InvoiceHelper:
         hours += hours_to_add
 
         return f'{hours:01} hours, {minutes:02} minutes, {seconds:02} seconds'
+    
+    def get_values_from_csv(self):
+        try:
+            with open(args.input, "r") as f:
+                results = [
+                    {
+                        "project": row["Project"],
+                        "task": row["Task"],
+                        "description": row["Description"],
+                        "duration": row["Duration"],
+                        # "tags": row["Tags"],
+                        "deleted": False,
+                        
+                    }
+                    for row in csv.DictReader(f)
+                ]
+        except KeyError:
+            with open(args.input, "r") as f:
+                results = [
+                    {
+                        "project": row["Project"],
+                        "task": self.get_task_and_description(row["Description"])[0],
+                        "description": self.get_task_and_description(row["Description"])[1],
+                        "duration": row["Duration"],
+                        # "tags": row["Tags"],
+                        "deleted": False,
+                        
+                    }
+                    for row in csv.DictReader(f)
+                ]
+
+            # print(json.dumps(results))
+        return results
 
 
 def make_pdf():
@@ -199,21 +255,7 @@ def make_pdf():
     today = date.today()
     due_date = today + relativedelta(months=+1)
 
-    with open(args.input, "r") as f:
-        results = [
-            {
-                "project": row["Project"],
-                "task": row["Task"],
-                "description": row["Description"],
-                "duration": row["Duration"],
-                "tags": row["Tags"],
-                "deleted": False,
-                
-            }
-            for row in csv.DictReader(f)
-        ]
-
-        #print(json.dumps(results))
+    results = helper.get_values_from_csv()
 
     # temp create new list with certain project
     results = list(filter(lambda a: a["project"] == customer["aliases"][0], results))
