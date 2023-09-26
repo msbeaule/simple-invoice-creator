@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 from filters import j2_round_float_to_two
 
 # when task is empty
-DEFAULT_TASK_NAME = "misc"
+DEFAULT_TASK_NAME = "Misc."
 
 # setting up rounding for decimals
 ctx = decimal.getcontext()
@@ -28,6 +28,11 @@ TEST_INVOICE_FILE_NAME = "test_invoice.pdf"
 
 parser.add_argument('-t', '--test', nargs="?", const=True, default=False, help=f'Creates an invoice with data but the file name is {TEST_INVOICE_FILE_NAME}')
 
+parser.add_argument('-n', '--number', help=f'Manualy input an invoice number')
+
+parser.add_argument('-c', '--customer', type=int, required=True, help=f'Enter the customer index from the customers.json file')
+
+
 args = parser.parse_args()
 
 class InvoiceHelper:
@@ -35,6 +40,12 @@ class InvoiceHelper:
 
     def __init__(self) -> None:
         pass
+
+    def get_customer(self):
+        with open("customers.json") as file:
+            customers = file.read()
+            customer = json.loads(customers)[args.customer]
+        return customer
     
     def add_two_together(self, dur1, dur2):
         time = dur1.split(":")
@@ -113,13 +124,6 @@ class InvoiceHelper:
             to_add = math.floor(duration / self.SIXTY)
             duration = duration % self.SIXTY
         return duration, to_add
-    
-
-    def get_customer(self):
-        with open("customers.json") as file:
-            customers = file.read()
-            customer = json.loads(customers)[1]
-        return customer
 
     def get_my_business(self):
         with open("my_business.json") as file:
@@ -244,7 +248,10 @@ class InvoiceHelper:
 def make_pdf():
     helper = InvoiceHelper()
     customer = helper.get_customer()
-    invoice_number = helper.get_next_invoice_number()
+    if args.number:
+        invoice_number = args.number
+    else:
+        invoice_number = helper.get_next_invoice_number()
     my_business = helper.get_my_business()
 
     if args.test:
