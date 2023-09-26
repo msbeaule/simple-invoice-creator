@@ -3,5 +3,7 @@
 example.*
 *.csv
 *.xlsx
+# openoffice spreadsheet
+*.ods
 
 __pycache__
