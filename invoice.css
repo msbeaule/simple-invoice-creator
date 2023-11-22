@@ -3,8 +3,7 @@
     @bottom-right {
         content: "Page " counter(page) " of " counter(pages);
         font-size: 10pt;
-        font-family: "Source Sans Pro", sans-serif;
-        font-family: "Source Sans 3", sans-serif;
+        font-family: "Source Sans Pro", "Source Sans 3", sans-serif;
         margin-bottom: 10pt;
     }
 }
@@ -20,8 +19,7 @@ table {
 }
 
 body {
-    font-family: "Source Sans Pro", sans-serif;
-    font-family: "Source Sans 3", sans-serif;
+    font-family: "Source Sans Pro", "Source Sans 3", sans-serif;
     font-size: 14pt;
     line-height: 16pt;
     margin: 0;
