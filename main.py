@@ -28,7 +28,7 @@ TEST_INVOICE_FILE_NAME = "test_invoice.pdf"
 
 parser.add_argument('-t', '--test', nargs="?", const=True, default=False, help=f'Creates an invoice with data but the file name is {TEST_INVOICE_FILE_NAME}')
 
-parser.add_argument('-n', '--number', help=f'Manualy input an invoice number')
+parser.add_argument('-n', '--number', help=f'Manually input an invoice number')
 
 parser.add_argument('-c', '--customer', type=int, required=True, help=f'Enter the customer index from the customers.json file')
 
