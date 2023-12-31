@@ -15,3 +15,46 @@ Use `python hours_to_duration.py -i <FILE>` and it will convert hours (if it's i
 ## Notes
 
 The .csv needs to be saved in not utf8, otherwise this program doesn't work.
+
+
+## .csv file format
+
+The .csv files this program can use must contain one of these three heading configurations.
+
+### Heading one (export from paid Toggl account)
+
+- There is no specific order
+- The headings listed are required
+- `Price` is an optional heading
+- There can be additional headings but the program will ignore them
+
+```
+Project, Duration, Task, Description
+sample project, 0:50:00, a task, a description
+```
+
+### Heading two (export from free Toggl account)
+
+- There is no specific order
+- The headings listed are required
+- The `Description` field can be used for both task and description in the invoice by using a `:`
+- `Price` is an optional heading
+- There can be additional headings but the program will ignore them
+
+```
+Project, Duration, Description
+sample project, 1:05:00, task: description
+```
+
+### Heading three (custom)
+
+- `Hours` must be in the 3rd spot, the rest can be in any order
+- The headings listed are required
+- The `Description` field can be used for both task and description in the invoice by using a `:`
+- `Price` is an optional heading
+- There can be additional headings but the program will ignore them
+
+```
+Project, Description, Hours
+sample project, task: description, 1.5
+```
