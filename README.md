@@ -1,21 +1,58 @@
 ## Simple python invoice creator
 
-Give it a .csv from Toggl and it will make an invoice. You need to create a few json files though. TODO: add the files and examples of what goes into them
+Give it a .csv from Toggl and it will make an invoice. You need to create a few json files though.
 
 ## Installation
 
 Follow the weasyprint instructions (need to install the prereq first then weasyprint): https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
 
-Then install the requirements file.
+Then install the requirements file:
 
-## Converting hours into duration
+```
+pip install -r requirements.txt
+```
 
-Use `python hours_to_duration.py -i <FILE>` and it will convert hours (if it's in the 4th column) into duration for each row. Outputs to a new file `OUTPUT.csv`. Then you can use `main.py` on the new file. 
+## Run the invoice creator
+
+```
+python main.py -i <csv file> -c <customer position in customers.json list> [-n <manual invoice number>] [--test]
+```
+
+Examples:
+
+```
+python main.py --help
+```
+
+```
+python main.py -i input.csv -c 2 -n 2023-0001
+```
+
+```
+python main.py -i input.csv -c 0 --test
+```
+
+```
+python main.py -i input.csv -c 0
+```
+
+### Converting hours into duration
+
+Use `python hours_to_duration.py -i <csv file>` and it will convert hours (if it's in the 4th column) into duration for each row. Outputs to a new file `OUTPUT-<file name>.csv`. Then you can use `main.py` on the new file.
 
 ## Notes
 
 The .csv needs to be saved in not utf8, otherwise this program doesn't work.
 
+## .json files
+
+You will need to make the following .json files:
+
+- customers.json
+- my_business.json
+- invoices.json
+
+TODO: add what's in each file
 
 ## .csv file format
 
