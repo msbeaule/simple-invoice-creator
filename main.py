@@ -70,33 +70,40 @@ class InvoiceHelper:
 
         return f'{hours:01}:{minutes:02}:{seconds:02}'
     
-    def set_prices_from_durations(self, items):
+    def set_prices_from_durations_and_static_prices(self, items):
         for item in items:
-            time = item["duration"].split(":")
-            # nvm seconds DO matter for this
+            if item["static_price"] != "":
+                price = Decimal(item["static_price"])
+            else:
+                time = item["duration"].split(":")
+                # nvm seconds DO matter for this
 
-            seconds = int(time[2])
-            seconds = seconds / self.SIXTY
-            minutes = int(time[1])
-            minutes = minutes + seconds
-            # this rounding here is important
-            minutes = round(Decimal(minutes / self.SIXTY), 4)
-            hours = int(time[0])
-            final_hours = hours + minutes
+                seconds = int(time[2])
+                seconds = seconds / self.SIXTY
+                minutes = int(time[1])
+                minutes = minutes + seconds
+                # this rounding here is important
+                minutes = round(Decimal(minutes / self.SIXTY), 4)
+                hours = int(time[0])
+                final_hours = hours + minutes
 
-            price = final_hours * item["rate"]
+                price = final_hours * item["rate"]
 
-            # then round it to two
-            price = round(Decimal(price), 2)
+                # then round it to two
+                price = round(Decimal(price), 2)
 
-            # then format with two 0's and save it
+                # then format with two 0's and save it
             item["price"] = f'{price:.2f}'
     
     def set_all_rates(self, items, customer):
         for item in items:
             #TODO: check tag for each to check for different rate for one task, otherwise, just assign based on the rate from the project
 
-            item["rate"] = customer["default_rate"]
+            # set a rate when static_price isn't there
+            if item["static_price"] == "":
+                item["rate"] = customer["default_rate"]
+            else:
+                item["rate"] = ""
 
     def get_total_balance(self, items):
         balance = 0
@@ -191,13 +198,15 @@ class InvoiceHelper:
         seconds = 0
 
         for item in items:
-            time = item["duration"].split(":")
+            # if static_price is set for a row, there will be no duration
+            if item["static_price"] == "":
+                time = item["duration"].split(":")
 
-            seconds += int(time[2])
+                seconds += int(time[2])
 
-            minutes += int(time[1])
+                minutes += int(time[1])
 
-            hours += int(time[0])
+                hours += int(time[0])
 
         minutes_to_add = 0
         hours_to_add = 0
@@ -270,7 +279,7 @@ def make_pdf():
             helper.find_duplicates_with_same_description_edit(results, item, x)
 
     # need this after the duplicates are merged together
-    helper.set_prices_from_durations(results)
+    helper.set_prices_from_durations_and_static_prices(results)
 
     # print(f'length before: {len(results)}')
 
