@@ -23,7 +23,7 @@ def get_values_from_csv():
             writer = csv.writer(csvoutput, lineterminator='\n')
 
             for row in csv.reader(csvinput):
-                hour_field  = row[3]
+                hour_field  = row[2]
                 
 
                 if row[0] == "Project":
