@@ -30,7 +30,11 @@ def get_values_from_csv():
                     # the first row in the csv, add the heading here
                     writer.writerow(row + ["Duration"])
                 else:
-                    duration = get_duration_from_hour(hour_field)
+                    try:
+                        hour_field = Decimal(hour_field)
+                        duration = get_duration_from_hour(hour_field)
+                    except decimal.InvalidOperation:
+                        duration = ""
                     #print(hour_field, "\t", duration)
 
                     writer.writerow(row + [duration])

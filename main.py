@@ -212,36 +212,31 @@ class InvoiceHelper:
         return f'{hours:01} hours, {minutes:02} minutes, {seconds:02} seconds'
     
     def get_values_from_csv(self):
-        try:
-            with open(args.input, "r") as f:
-                results = [
-                    {
-                        "project": row["Project"],
-                        "task": row["Task"],
-                        "description": row["Description"],
-                        "duration": row["Duration"],
-                        # "tags": row["Tags"],
-                        "deleted": False,
-                        
-                    }
-                    for row in csv.DictReader(f)
-                ]
-        except KeyError:
-            with open(args.input, "r") as f:
-                results = [
-                    {
-                        "project": row["Project"],
-                        "task": self.get_task_and_description(row["Description"])[0],
-                        "description": self.get_task_and_description(row["Description"])[1],
-                        "duration": row["Duration"],
-                        # "tags": row["Tags"],
-                        "deleted": False,
-                        
-                    }
-                    for row in csv.DictReader(f)
-                ]
+        with open(args.input, "r") as f:
+            results = []
+            for row in csv.DictReader(f):
+                result = {
+                    "project": row["Project"],
+                    "duration": row["Duration"],
+                    # "tags": row["Tags"],
+                    "deleted": False,
+                }
+                # deal with the two different types of toggl csv files, free and paid accounts
+                try:
+                    result["task"] = row["Task"]
+                    result["description"] = row["Description"]
+                except KeyError:
+                    result["task"] = self.get_task_and_description(row["Description"])[0]
+                    result["description"] = self.get_task_and_description(row["Description"])[1]
+                
+                # if there's a value set in the csv for a price, pull that
+                try:
+                    result["static_price"] = row["Price"]
+                except KeyError:
+                    pass
 
-            # print(json.dumps(results))
+                results.append(result)
+
         return results
 
 
