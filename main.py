@@ -72,7 +72,7 @@ class InvoiceHelper:
     
     def set_prices_from_durations_and_static_prices(self, items):
         for item in items:
-            if item["static_price"] != "":
+            if ("static_price" in item) and item["static_price"] != "":
                 price = Decimal(item["static_price"])
             else:
                 time = item["duration"].split(":")
@@ -100,10 +100,12 @@ class InvoiceHelper:
             #TODO: check tag for each to check for different rate for one task, otherwise, just assign based on the rate from the project
 
             # set a rate when static_price isn't there
-            if item["static_price"] == "":
-                item["rate"] = customer["default_rate"]
-            else:
+            if ("static_price" in item) and item["static_price"] == "":
                 item["rate"] = ""
+                # if static price key exists, don't need to do the below
+            else:
+                item["rate"] = customer["default_rate"]
+
 
     def get_total_balance(self, items):
         balance = 0
@@ -199,7 +201,7 @@ class InvoiceHelper:
 
         for item in items:
             # if static_price is set for a row, there will be no duration
-            if item["static_price"] == "":
+            if ("static_price" not in item) or item["static_price"] == "":
                 time = item["duration"].split(":")
 
                 seconds += int(time[2])

@@ -6,4 +6,9 @@ example.*
 # openoffice spreadsheet
 *.ods
 
+old csv/
+
+README.private.md
+
+
 __pycache__
