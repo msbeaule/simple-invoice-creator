@@ -66,7 +66,7 @@ class InvoiceHelper:
         hours = int(time[0]) + int(time2[0])
         hours = hours + hours_to_add
 
-        print(f'{hours:02}:{minutes:02}:{seconds:02}')
+        # print(f'{hours:02}:{minutes:02}:{seconds:02}')
 
         return f'{hours:01}:{minutes:02}:{seconds:02}'
     
